@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StreetWearPlug — @916sellss</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,700;0,900;1,900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0d0d0d;
+  --white:#f5f5f0;
+  --yellow:#ffe600;
+  --pink:#ff2d78;
+  --cyan:#00f0ff;
+  --orange:#ff6b00;
+  --green:#00ff7f;
+  --gray:#1a1a1a;
+  --gray2:#252525;
+  --muted:#666;
+  --tick-h:32px;
+  --nav-h:62px;
+}
+
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--white);font-family:'Space Grotesk',sans-serif;min-height:100vh;overflow-x:hidden}
+
+/* ── TICKER ── */
+.ticker{
+  position:fixed;top:0;left:0;right:0;height:var(--tick-h);
+  background:var(--yellow);overflow:hidden;display:flex;align-items:center;
+  z-index:1100;border-bottom:2px solid #000;
+}
+.ticker-track{display:flex;gap:0;animation:tick 28s linear infinite;white-space:nowrap;will-change:transform}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ticker-item{
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:13px;
+  letter-spacing:2px;text-transform:uppercase;color:#000;
+  padding:0 20px;border-right:2px solid rgba(0,0,0,0.2);flex-shrink:0;
+  display:flex;align-items:center;height:var(--tick-h);
+}
+.ticker-dot{color:var(--pink);margin:0 8px;font-size:16px}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:var(--tick-h);left:0;right:0;height:var(--nav-h);
+  background:#000;border-bottom:3px solid var(--yellow);
+  z-index:1000;display:flex;align-items:center;padding:0 16px;gap:12px;
+}
+.nav-logo{
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;
+  font-size:28px;letter-spacing:1px;color:var(--white);text-decoration:none;
+  flex-shrink:0;line-height:1;text-transform:uppercase;
+}
+.nav-logo .plug{color:var(--yellow);
+  text-shadow: 2px 2px 0 var(--pink);
+}
+
+.nav-scroll-wrap{display:flex;align-items:center;flex:1;min-width:0;gap:4px}
+.nav-arrow{
+  background:var(--gray2);border:1px solid #333;color:var(--white);
+  cursor:pointer;width:24px;height:24px;border-radius:4px;font-size:14px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  transition:background .15s;
+}
+.nav-arrow:hover{background:var(--yellow);color:#000}
+
+.nav-links{display:flex;align-items:center;gap:3px;overflow-x:auto;scrollbar-width:none;flex:1;scroll-behavior:smooth}
+.nav-links::-webkit-scrollbar{display:none}
+
+.nav-btn{
+  background:none;border:2px solid transparent;
+  color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  font-size:12px;letter-spacing:1.5px;text-transform:uppercase;
+  padding:4px 10px;border-radius:4px;white-space:nowrap;cursor:pointer;
+  transition:all .15s;
+}
+.nav-btn:hover{color:var(--white);border-color:#333}
+.nav-btn.active{color:#000;background:var(--yellow);border-color:var(--yellow)}
+
+.ig-btn{
+  display:flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);
+  color:#fff;text-decoration:none;padding:7px 14px;border-radius:4px;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:13px;
+  letter-spacing:1px;text-transform:uppercase;flex-shrink:0;
+  border:2px solid transparent;transition:all .15s;
+}
+.ig-btn:hover{border-color:var(--white);transform:scale(1.03)}
+.ig-btn svg{width:14px;height:14px}
+
+.hamburger{display:none;background:none;border:2px solid #333;color:#fff;cursor:pointer;padding:4px 8px;border-radius:4px}
+
+/* ── MOBILE NAV ── */
+.mobile-nav{
+  display:none;position:fixed;
+  top:calc(var(--tick-h) + var(--nav-h));left:0;right:0;
+  background:#000;border-bottom:3px solid var(--yellow);
+  z-index:999;flex-direction:column;padding:10px;gap:4px;
+  max-height:70vh;overflow-y:auto;
+}
+.mobile-nav.open{display:flex}
+.mobile-nav .nav-btn{font-size:14px;padding:10px 14px;text-align:left;border-color:#1f1f1f}
+
+/* ── MAIN ── */
+main{padding-top:calc(var(--tick-h) + var(--nav-h))}
+
+/* ── HERO ── */
+.hero{
+  min-height:85vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:60px 24px 48px;
+  position:relative;overflow:hidden;
+}
+
+/* graffiti spray background blobs */
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 40% at 20% 50%, rgba(255,230,0,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 35% at 80% 40%, rgba(255,45,120,0.07) 0%, transparent 60%),
+    radial-gradient(ellipse 45% 45% at 50% 80%, rgba(0,240,255,0.06) 0%, transparent 60%);
+  pointer-events:none;
+}
+
+/* grunge texture overlay */
+.hero::after{
+  content:'';position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;opacity:.4;
+}
+
+.hero-tag{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;
+  letter-spacing:4px;text-transform:uppercase;
+  color:var(--yellow);background:#000;border:2px solid var(--yellow);
+  padding:4px 14px;border-radius:2px;margin-bottom:20px;display:inline-block;
+  position:relative;z-index:1;
+}
+
+.hero-title{
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;
+  font-size:clamp(80px,16vw,180px);line-height:.88;
+  text-transform:uppercase;position:relative;z-index:1;
+  margin-bottom:6px;
+}
+.hero-title .line1{
+  color:var(--white);
+  -webkit-text-stroke:2px var(--white);
+  display:block;
+}
+.hero-title .line2{
+  color:transparent;
+  -webkit-text-stroke:3px var(--yellow);
+  display:block;letter-spacing:-2px;
+}
+.hero-title .line3{
+  color:var(--pink);
+  display:block;font-size:clamp(40px,8vw,90px);
+  -webkit-text-stroke:0px;letter-spacing:8px;
+}
+
+.hero-sub{
+  font-size:12px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--muted);margin:20px 0 32px;position:relative;z-index:1;
+}
+.hero-sub span{color:var(--cyan);font-weight:700}
+
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1}
+
+.btn-primary{
+  display:flex;align-items:center;gap:8px;
+  background:var(--yellow);color:#000;
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:15px;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:12px 28px;border-radius:3px;text-decoration:none;border:none;cursor:pointer;
+  transition:all .15s;box-shadow:4px 4px 0 var(--pink);
+}
+.btn-primary:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--pink)}
+
+.btn-outline{
+  display:flex;align-items:center;gap:8px;
+  background:transparent;color:var(--white);
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:15px;
+  letter-spacing:2px;text-transform:uppercase;
+  padding:12px 28px;border-radius:3px;text-decoration:none;
+  border:2px solid var(--white);cursor:pointer;
+  transition:all .15s;
+}
+.btn-outline:hover{background:var(--white);color:#000}
+
+/* ── SECTION ── */
+.section{display:none;padding:0 20px 80px;max-width:1400px;margin:0 auto}
+.section.active{display:block}
+
+/* ── SECTION HEADER ── */
+.sec-hdr{
+  display:flex;align-items:center;gap:16px;
+  margin-bottom:28px;padding:20px 0 16px;
+  border-bottom:3px solid var(--yellow);
+}
+.sec-badge{
+  background:var(--yellow);color:#000;
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:10px;
+  letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:2px;
+}
+.sec-title{
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;
+  font-size:clamp(32px,5vw,52px);text-transform:uppercase;color:var(--white);
+  letter-spacing:1px;
+}
+.sec-price{font-size:12px;color:var(--cyan);font-weight:700;letter-spacing:1px;margin-left:auto}
+
+/* ── EMBED ── */
+.sheet-embed{
+  width:100%;height:80vh;
+  border:3px solid var(--yellow);border-radius:4px;
+  background:#111;
+}
+
+.embed-note{
+  display:flex;align-items:center;gap:10px;
+  background:rgba(255,230,0,0.06);border:1px solid rgba(255,230,0,0.2);
+  border-radius:4px;padding:12px 16px;margin-bottom:16px;
+  font-size:12px;color:var(--muted);letter-spacing:.5px;
+}
+.embed-note strong{color:var(--yellow)}
+
+/* ── HOW TO ORDER ── */
+.hto-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:40px}
+.info-box{
+  background:var(--gray);border:2px solid #2a2a2a;border-radius:4px;
+  padding:24px;
+}
+.info-box h3{
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:13px;
+  letter-spacing:3px;text-transform:uppercase;color:var(--yellow);
+  margin-bottom:14px;border-bottom:1px solid #2a2a2a;padding-bottom:10px;
+}
+.info-box ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.info-box li{font-size:13px;color:#bbb;line-height:1.5;display:flex;gap:8px}
+.info-box li::before{content:'▸';color:var(--yellow);flex-shrink:0}
+
+.steps{display:flex;flex-direction:column;gap:0}
+.step{
+  display:flex;gap:20px;padding:24px 0;
+  border-bottom:1px solid #1e1e1e;
+}
+.step:last-child{border-bottom:none}
+.step-n{
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;
+  font-size:56px;line-height:1;flex-shrink:0;width:52px;
+  color:transparent;-webkit-text-stroke:2px var(--yellow);
+}
+.step h3{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:17px;
+  letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;color:var(--white);
+}
+.step p{font-size:13px;color:var(--muted);line-height:1.7}
+.step a{color:var(--pink);text-decoration:none;font-weight:600}
+.step a:hover{text-decoration:underline}
+
+/* ── BRAND TABS (inside sections) ── */
+.brand-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.brand-tab{
+  background:var(--gray2);border:2px solid #2a2a2a;
+  color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+  padding:5px 12px;border-radius:3px;cursor:pointer;transition:all .15s;
+}
+.brand-tab.on{background:var(--yellow);color:#000;border-color:var(--yellow)}
+.brand-tab:hover:not(.on){color:var(--white);border-color:#444}
+
+/* ── PRODUCT GRID ── */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+
+.pcard{
+  background:var(--gray);border:2px solid #222;border-radius:4px;
+  overflow:hidden;cursor:pointer;transition:transform .2s,border-color .2s;
+  position:relative;
+}
+.pcard:hover{transform:translateY(-4px);border-color:var(--yellow)}
+.pcard:hover .pcard-overlay{opacity:1}
+
+.pcard-overlay{
+  position:absolute;inset:0;background:rgba(255,230,0,0.06);
+  opacity:0;transition:opacity .2s;pointer-events:none;z-index:1;
+}
+
+.pimg{
+  aspect-ratio:1;background:var(--gray2);
+  display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;
+}
+.pimg img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.pcard:hover .pimg img{transform:scale(1.06)}
+.pimg-ph{
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:11px;
+  letter-spacing:2px;text-transform:uppercase;color:#2e2e2e;
+}
+.pimg-ph svg{width:32px;height:32px;opacity:.3}
+
+.badge{
+  position:absolute;top:8px;left:8px;
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:10px;
+  letter-spacing:1.5px;text-transform:uppercase;padding:3px 8px;border-radius:2px;
+}
+.badge-in{background:var(--green);color:#000}
+.badge-out{background:var(--pink);color:#fff}
+
+.pinfo{padding:12px 14px 14px}
+.pname{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;
+  text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;line-height:1.3;
+  color:var(--white);
+}
+.pprice{
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-style:italic;
+  font-size:24px;color:var(--yellow);letter-spacing:1px;
+}
+.ptags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
+.ptag{
+  font-size:10px;color:var(--muted);background:#1e1e1e;
+  padding:3px 7px;border-radius:2px;border:1px solid #2a2a2a;
+  font-weight:500;letter-spacing:.5px;
+}
+
+/* size grid */
+.size-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:8px}
+.sz{
+  font-size:10px;text-align:center;padding:4px 2px;border-radius:2px;
+  font-weight:700;letter-spacing:.5px;border:1px solid #2a2a2a;
+  font-family:'Barlow Condensed',sans-serif;font-size:11px;
+}
+.sz-ok{background:rgba(0,255,127,0.1);color:var(--green);border-color:rgba(0,255,127,0.2)}
+.sz-no{background:rgba(255,45,120,0.08);color:#444;border-color:#1e1e1e;text-decoration:line-through}
+.sz-low{background:rgba(255,107,0,0.1);color:var(--orange);border-color:rgba(255,107,0,0.2)}
+
+/* section divider label */
+.cat-label{
+  grid-column:1/-1;
+  font-family:'Barlow Condensed',sans-serif;font-weight:900;font-size:11px;
+  letter-spacing:3px;text-transform:uppercase;color:var(--pink);
+  padding:16px 0 8px;border-bottom:1px solid #1e1e1e;margin-bottom:4px;
+  display:flex;align-items:center;gap:12px;
+}
+.cat-label::after{content:'';flex:1;height:1px;background:#1e1e1e}
+
+@media(max-width:768px){
+  .nav-links{display:none}
+  .hamburger{display:block}
+  .hto-grid{grid-template-columns:1fr}
+  .pgrid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+  .size-grid{grid-template-columns:repeat(2,1fr)}
+  nav{padding:0 12px}
+  .section{padding:0 14px 60px}
+  .hero{min-height:70vh}
+}
+</style>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track">
+    <div class="ticker-item">StreetWearPlug<span class="ticker-dot">★</span></div>
+    <div class="ticker-item">DM to Order<span class="ticker-dot">★</span></div>
+    <div class="ticker-item">@916sellss on IG<span class="ticker-dot">★</span></div>
+    <div class="ticker-item">Roseville CA<span class="ticker-dot">★</span></div>
+    <div class="ticker-item">Meetups & Shipping<span class="ticker-dot">★</span></div>
+    <div class="ticker-item">Bape · Sp5der · Hellstar · Essentials<span class="ticker-dot">★</span></div>
+    <div class="ticker-item">Free Ship 20+ Pieces<span class="ticker-dot">★</span></div>
+    <div class="ticker-item">3+ Pieces = Discount<span class="ticker-dot">★</span></div>
+    <!-- duplicate for seamless loop -->
+    <div class="ticker-item">StreetWearPlug<span class="ticker-dot">★</span></div>
+    <div class="ticker-item">DM to Order<span class="ticker-dot">★</span></div>
+    <div class="ticker-item">@916sellss on IG<span class="ticker-dot">★</span></div>
+    <div class="ticker-item">Roseville CA<span class="ticker-dot">★</span></div>
+    <div class="ticker-item">Meetups & Shipping<span class="ticker-dot">★</span></div>
+    <div class="ticker-item">Bape · Sp5der · Hellstar · Essentials<span class="ticker-dot">★</span></div>
+    <div class="ticker-item">Free Ship 20+ Pieces<span class="ticker-dot">★</span></div>
+    <div class="ticker-item">3+ Pieces = Discount<span class="ticker-dot">★</span></div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#" onclick="show('hero');return false">Street<span class="plug">Wear</span>Plug</a>
+  <div class="nav-scroll-wrap">
+    <button class="nav-arrow" onclick="scrollNav(-160)">&#8249;</button>
+    <div class="nav-links" id="navLinks">
+      <button class="nav-btn" onclick="show('how-to-order')">How to Order</button>
+      <button class="nav-btn" onclick="show('ess-hoodies')">Essentials Hoodies</button>
+      <button class="nav-btn" onclick="show('ess-tees')">Essentials Tees</button>
+      <button class="nav-btn" onclick="show('denim-shorts')">Denim Tear Shorts</button>
+      <button class="nav-btn" onclick="show('denim-hoodies')">Denim Tear Hoodies</button>
+      <button class="nav-btn" onclick="show('bape')">Bape Tees</button>
+      <button class="nav-btn" onclick="show('alo')">ALO</button>
+      <button class="nav-btn" onclick="show('eric')">Eric Emanuel</button>
+      <button class="nav-btn" onclick="show('milos')">Baby Milos</button>
+      <button class="nav-btn" onclick="show('sp5der')">Sp5der</button>
+      <button class="nav-btn" onclick="show('hellstar')">Hellstar</button>
+      <button class="nav-btn" onclick="show('sheet')" style="color:var(--yellow)">📋 Full Catalog</button>
+    </div>
+    <button class="nav-arrow" onclick="scrollNav(160)">&#8250;</button>
+  </div>
+  <a class="ig-btn" href="https://www.instagram.com/916sellss/" target="_blank">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#fff" stroke="none"/></svg>
+    @916sellss
+  </a>
+  <button class="hamburger" onclick="toggleMenu()">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+</nav>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="nav-btn" onclick="show('how-to-order');closeMenu()">How to Order</button>
+  <button class="nav-btn" onclick="show('ess-hoodies');closeMenu()">Essentials Hoodies & Sweats</button>
+  <button class="nav-btn" onclick="show('ess-tees');closeMenu()">Essentials Tees & Shorts</button>
+  <button class="nav-btn" onclick="show('denim-shorts');closeMenu()">Denim Tear Shorts</button>
+  <button class="nav-btn" onclick="show('denim-hoodies');closeMenu()">Denim Tear Hoodies</button>
+  <button class="nav-btn" onclick="show('bape');closeMenu()">Bape Tees</button>
+  <button class="nav-btn" onclick="show('alo');closeMenu()">ALO</button>
+  <button class="nav-btn" onclick="show('eric');closeMenu()">Eric Emanuel</button>
+  <button class="nav-btn" onclick="show('milos');closeMenu()">Baby Milos</button>
+  <button class="nav-btn" onclick="show('sp5der');closeMenu()">Sp5der</button>
+  <button class="nav-btn" onclick="show('hellstar');closeMenu()">Hellstar</button>
+  <button class="nav-btn" onclick="show('sheet');closeMenu()" style="color:var(--yellow)">📋 Full Catalog</button>
+</div>
+
+<main>
+
+<!-- HERO -->
+<div class="hero" id="hero-section">
+  <div class="hero-tag">Roseville, CA · Est. 2024</div>
+  <h1 class="hero-title">
+    <span class="line1">Street</span>
+    <span class="line2">Wear</span>
+    <span class="line3">Plug</span>
+  </h1>
+  <p class="hero-sub">
+    <span>Bape</span> · <span>Essentials</span> · <span>Sp5der</span> · <span>Hellstar</span> · <span>ALO</span> · <span>Eric Emanuel</span>
+  </p>
+  <div class="hero-btns">
+    <button class="btn-primary" onclick="show('sheet')">📋 Browse Full Catalog</button>
+    <a class="btn-outline" href="https://www.instagram.com/916sellss/" target="_blank">DM to Order</a>
+  </div>
+</div>
+
+<!-- HOW TO ORDER -->
+<div class="section" id="section-how-to-order">
+  <div class="sec-hdr">
+    <span class="sec-badge">Info</span>
+    <h2 class="sec-title">How to Order</h2>
+  </div>
+  <div class="hto-grid">
+    <div class="info-box">
+      <h3>📦 Shipping Info</h3>
+      <ul>
+        <li>Located in Roseville, CA</li>
+        <li>Meetups & shipping both available</li>
+        <li>2–5 days via UPS/USPS</li>
+        <li>$30–$100 depending on distance</li>
+        <li>FREE shipping on 20+ pieces</li>
+      </ul>
+    </div>
+    <div class="info-box">
+      <h3>🛍️ Order Info</h3>
+      <ul>
+        <li>No minimum — singles & bulk welcome</li>
+        <li>Order 3+ pieces for a discount</li>
+        <li>Green = in stock · Red = sold out</li>
+        <li>Payment: CashApp, Venmo, Zelle</li>
+        <li>Tracking on all shipped orders</li>
+      </ul>
+    </div>
+  </div>
+  <div class="steps">
+    <div class="step"><div class="step-n">1</div><div><h3>Browse the catalog</h3><p>Use the tabs above to explore by brand — or hit "Full Catalog" to see everything at once with photos and stock levels.</p></div></div>
+    <div class="step"><div class="step-n">2</div><div><h3>DM on Instagram</h3><p>See something? Slide into <a href="https://www.instagram.com/916sellss/" target="_blank">@916sellss</a> on IG. Send the item name, size, color, and quantity.</p></div></div>
+    <div class="step"><div class="step-n">3</div><div><h3>Lock it in</h3><p>Get a final price with shipping. Confirm and pay via CashApp, Venmo, or Zelle to reserve your pieces.</p></div></div>
+    <div class="step"><div class="step-n">4</div><div><h3>Ships in 2–5 days</h3><p>Order confirmed → ships fast via UPS/USPS with tracking. Or arrange a local meetup in Roseville.</p></div></div>
+  </div>
+</div>
+
+<!-- FULL CATALOG EMBED -->
+<div class="section" id="section-sheet">
+  <div class="sec-hdr">
+    <span class="sec-badge">Live</span>
+    <h2 class="sec-title">Full Catalog</h2>
+    <span class="sec-price">Updates in real time</span>
+  </div>
+  <div class="embed-note">
+    <span>💡</span>
+    <span>This is your <strong>live Google Sheet</strong> — photos, stock levels, and prices update automatically. Click any tab at the bottom to switch brands.</span>
+  </div>
+  <iframe
+    class="sheet-embed"
+    src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTXEsP67CY_2-CW3PxOAjw155DUpgKshS2lfWohVZY4W_-NIeFm390F8ziBA66lUeIu9zLOAFBLbVRr/pubhtml?widget=true&headers=false"
+    frameborder="0"
+    loading="lazy">
+  </iframe>
+</div>
+
+<!-- ESSENTIALS HOODIES -->
+<div class="section" id="section-ess-hoodies">
+  <div class="sec-hdr"><span class="sec-badge">FOG</span><h2 class="sec-title">Essentials Hoodies & Sweats</h2><span class="sec-price">$50–$55</span></div>
+  <div class="pgrid" id="grid-ess-hoodies"></div>
+</div>
+
+<!-- ESSENTIALS TEES -->
+<div class="section" id="section-ess-tees">
+  <div class="sec-hdr"><span class="sec-badge">FOG</span><h2 class="sec-title">Essentials Tees & Shorts</h2><span class="sec-price">Tees $40 · Shorts $45</span></div>
+  <div class="pgrid" id="grid-ess-tees"></div>
+</div>
+
+<!-- DENIM TEAR SHORTS -->
+<div class="section" id="section-denim-shorts">
+  <div class="sec-hdr"><span class="sec-badge">DT</span><h2 class="sec-title">Denim Tear Shorts</h2><span class="sec-price">$55</span></div>
+  <div class="pgrid" id="grid-denim-shorts"></div>
+</div>
+
+<!-- DENIM TEAR HOODIES -->
+<div class="section" id="section-denim-hoodies">
+  <div class="sec-hdr"><span class="sec-badge">DT</span><h2 class="sec-title">Denim Tear Hoodies</h2><span class="sec-price">$60</span></div>
+  <div class="pgrid" id="grid-denim-hoodies"></div>
+</div>
+
+<!-- BAPE -->
+<div class="section" id="section-bape">
+  <div class="sec-hdr"><span class="sec-badge">BAPE</span><h2 class="sec-title">Bape Tees</h2><span class="sec-price">$45</span></div>
+  <div class="pgrid" id="grid-bape"></div>
+</div>
+
+<!-- ALO -->
+<div class="section" id="section-alo">
+  <div class="sec-hdr"><span class="sec-badge">ALO</span><h2 class="sec-title">ALO Yoga</h2><span class="sec-price">$35–$50</span></div>
+  <div class="pgrid" id="grid-alo"></div>
+</div>
+
+<!-- ERIC EMANUEL -->
+<div class="section" id="section-eric">
+  <div class="sec-hdr"><span class="sec-badge">EE</span><h2 class="sec-title">Eric Emanuel Shorts</h2><span class="sec-price">$45</span></div>
+  <div class="pgrid" id="grid-eric"></div>
+</div>
+
+<!-- BABY MILOS -->
+<div class="section" id="section-milos">
+  <div class="sec-hdr"><span class="sec-badge">BAPE</span><h2 class="sec-title">Baby Milos</h2><span class="sec-price">$60</span></div>
+  <div class="pgrid" id="grid-milos"></div>
+</div>
+
+<!-- SP5DER -->
+<div class="section" id="section-sp5der">
+  <div class="sec-hdr"><span class="sec-badge">SP5</span><h2 class="sec-title">Sp5der Tees</h2><span class="sec-price">$40</span></div>
+  <div class="pgrid" id="grid-sp5der"></div>
+</div>
+
+<!-- HELLSTAR -->
+<div class="section" id="section-hellstar">
+  <div class="sec-hdr"><span class="sec-badge">HS</span><h2 class="sec-title">Hellstar Tees</h2><span class="sec-price">$40 · No NFC</span></div>
+  <div class="pgrid" id="grid-hellstar"></div>
+</div>
+
+</main>
+
+<script>
+const IG = 'https://www.instagram.com/916sellss/';
+
+// ── NAV ──
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  if (id === 'hero') {
+    document.getElementById('hero-section').scrollIntoView({behavior:'smooth'});
+    return;
+  }
+  const s = document.getElementById('section-' + id);
+  if (s) s.classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    if (b.getAttribute('onclick') && b.getAttribute('onclick').includes("'" + id + "'")) b.classList.add('active');
+  });
+  window.scrollTo({top: document.querySelector('main').offsetTop, behavior:'smooth'});
+}
+function scrollNav(px){document.getElementById('navLinks').scrollBy({left:px,behavior:'smooth'})}
+function toggleMenu(){document.getElementById('mobileNav').classList.toggle('open')}
+function closeMenu(){document.getElementById('mobileNav').classList.remove('open')}
+
+// ── CARD ──
+function card(name, price, sizes, img) {
+  const total = sizes.reduce((a,b)=>a+b.q,0);
+  const inStock = total > 0;
+  const badge = inStock
+    ? '<span class="badge badge-in">In Stock</span>'
+    : '<span class="badge badge-out">Sold Out</span>';
+  const imgHtml = img
+    ? `<img src="${img}" alt="${name}" loading="lazy" onerror="this.parentNode.innerHTML='<div class=pimg-ph><svg viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'#333\\' stroke-width=\\'1.5\\'><rect x=\\'3\\' y=\\'3\\' width=\\'18\\' height=\\'18\\' rx=\\'2\\'/><circle cx=\\'8.5\\' cy=\\'8.5\\' r=\\'1.5\\'/><polyline points=\\'21 15 16 10 5 21\\'/></svg>DM FOR PHOTO</div>'">`
+    : `<div class="pimg-ph"><svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>DM FOR PHOTO</div>`;
+  const szHtml = sizes.map(s=>{
+    const cls = s.q===0?'sz sz-no':s.q<=3?'sz sz-low':'sz sz-ok';
+    return `<div class="${cls}">${s.s}${s.q>0?' ·'+s.q:''}</div>`;
+  }).join('');
+  return `<div class="pcard" onclick="window.open('${IG}','_blank')">
+    <div class="pcard-overlay"></div>
+    <div class="pimg">${imgHtml}${badge}</div>
+    <div class="pinfo">
+      <div class="pname">${name}</div>
+      <div class="pprice">${price}</div>
+      <div class="size-grid">${szHtml}</div>
+    </div>
+  </div>`;
+}
+
+function r(id, html){ const g=document.getElementById('grid-'+id); if(g) g.innerHTML=html||'<p style="color:var(--muted);padding:40px 0;font-size:13px">No items listed. DM <a href="'+IG+'" target="_blank" style="color:var(--yellow)">@916sellss</a></p>'; }
+
+// ── BAPE ──
+r('bape',[
+  {n:'Bape-001',s:[{s:'S',q:9},{s:'M',q:8},{s:'L',q:13},{s:'XL',q:9}]},
+  {n:'Bape-002',s:[{s:'S',q:19},{s:'M',q:22},{s:'L',q:0},{s:'XL',q:0}]},
+  {n:'Bape-003',s:[{s:'S',q:11},{s:'M',q:12},{s:'L',q:14},{s:'XL',q:10}]},
+  {n:'Bape-004',s:[{s:'S',q:8},{s:'M',q:9},{s:'L',q:14},{s:'XL',q:9}]},
+  {n:'Bape-005',s:[{s:'S',q:0},{s:'M',q:0},{s:'L',q:0},{s:'XL',q:0}]},
+  {n:'Bape-006',s:[{s:'S',q:9},{s:'M',q:12},{s:'L',q:15},{s:'XL',q:10}]},
+  {n:'Bape-007',s:[{s:'S',q:8},{s:'M',q:12},{s:'L',q:14},{s:'XL',q:9}]},
+  {n:'Bape-008',s:[{s:'S',q:0},{s:'M',q:0},{s:'L',q:0},{s:'XL',q:2}]},
+].map(i=>card(i.n,'$45',i.s,null)).join(''));
+
+// ── HELLSTAR ──
+r('hellstar',[
+  {n:'Hellstar-001',s:[{s:'S',q:0},{s:'M',q:0},{s:'L',q:3},{s:'XL',q:5}]},
+  {n:'Hellstar-002',s:[{s:'S',q:2},{s:'M',q:3},{s:'L',q:4},{s:'XL',q:5}]},
+  {n:'Hellstar-003',s:[{s:'S',q:3},{s:'M',q:3},{s:'L',q:4},{s:'XL',q:4}]},
+  {n:'Hellstar-004',s:[{s:'S',q:1},{s:'M',q:2},{s:'L',q:3},{s:'XL',q:5}]},
+  {n:'Hellstar-005',s:[{s:'S',q:0},{s:'M',q:0},{s:'L',q:3},{s:'XL',q:5}]},
+  {n:'Hellstar-006',s:[{s:'S',q:0},{s:'M',q:0},{s:'L',q:4},{s:'XL',q:5}]},
+  {n:'Hellstar-007',s:[{s:'S',q:2},{s:'M',q:3},{s:'L',q:5},{s:'XL',q:4}]},
+  {n:'Hellstar-008',s:[{s:'S',q:0},{s:'M',q:0},{s:'L',q:4},{s:'XL',q:4}]},
+  {n:'Hellstar-009',s:[{s:'S',q:2},{s:'M',q:2},{s:'L',q:3},{s:'XL',q:5}]},
+  {n:'Hellstar-010',s:[{s:'S',q:0},{s:'M',q:1},{s:'L',q:3},{s:'XL',q:5}]},
+].map(i=>card(i.n,'$40',i.s,null)).join(''));
+
+// ── SP5DER ──
+r('sp5der',[
+  {n:'Sp5der Tee #1',s:[{s:'XXS',q:0},{s:'XS',q:0},{s:'S',q:67},{s:'M',q:19},{s:'L',q:0},{s:'XL',q:0}]},
+  {n:'Sp5der Tee #2',s:[{s:'XXS',q:0},{s:'XS',q:0},{s:'S',q:51},{s:'M',q:6},{s:'L',q:0},{s:'XL',q:0}]},
+].map(i=>card(i.n,'$40',i.s,null)).join(''));
+
+// ── BABY MILOS ──
+r('milos',[
+  {n:'Blue Shark',q:5},{n:'Apple',q:4},{n:'Brown',q:0},
+  {n:'Pink Shark',q:0},{n:'Donut',q:0},{n:'Mushroom',q:0},
+  {n:'Star',q:0},{n:'Green',q:1},
+].map(i=>{
+  const badge=i.q>0?'<span class="badge badge-in">In Stock</span>':'<span class="badge badge-out">Sold Out</span>';
+  return `<div class="pcard" onclick="window.open('${IG}','_blank')">
+    <div class="pcard-overlay"></div>
+    <div class="pimg"><div class="pimg-ph"><svg viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>BABY MILO DOLL</div>${badge}</div>
+    <div class="pinfo"><div class="pname">${i.n}</div><div class="pprice">$60</div>
+    <div class="size-grid"><div class="sz ${i.q>0?'sz-ok':'sz-no'}">${i.q>0?i.q+' left':'Sold Out'}</div></div></div>
+  </div>`;
+}).join(''));
+
+// ── ERIC EMANUEL ──
+r('eric',[
+  {n:'EE-001',s:[{s:'S',q:17},{s:'M',q:0},{s:'L',q:24},{s:'XL',q:20}]},
+  {n:'EE-002',s:[{s:'S',q:16},{s:'M',q:8},{s:'L',q:6},{s:'XL',q:14}]},
+  {n:'EE-003',s:[{s:'S',q:24},{s:'M',q:27},{s:'L',q:18},{s:'XL',q:17}]},
+  {n:'EE-004',s:[{s:'S',q:35},{s:'M',q:33},{s:'L',q:41},{s:'XL',q:21}]},
+  {n:'EE-005',s:[{s:'S',q:9},{s:'M',q:7},{s:'L',q:9},{s:'XL',q:7}]},
+  {n:'EE-006',s:[{s:'S',q:8},{s:'M',q:0},{s:'L',q:9},{s:'XL',q:6}]},
+  {n:'EE-007',s:[{s:'S',q:10},{s:'M',q:7},{s:'L',q:10},{s:'XL',q:6}]},
+  {n:'EE-008',s:[{s:'S',q:9},{s:'M',q:5},{s:'L',q:9},{s:'XL',q:7}]},
+  {n:'EE-009',s:[{s:'S',q:9},{s:'M',q:3},{s:'L',q:8},{s:'XL',q:6}]},
+  {n:'EE-010',s:[{s:'S',q:9},{s:'M',q:7},{s:'L',q:9},{s:'XL',q:7}]},
+  {n:'EE-011',s:[{s:'S',q:10},{s:'M',q:9},{s:'L',q:10},{s:'XL',q:7}]},
+].map(i=>card(i.n,'$45',i.s,null)).join(''));
+
+// ── ALO ──
+r('alo',[
+  {n:'ALO Socks — Black',p:'$35',s:[{s:'XS',q:0},{s:'S',q:35},{s:'M',q:31},{s:'L',q:30}]},
+  {n:'ALO Socks — White',p:'$35',s:[{s:'XS',q:0},{s:'S',q:35},{s:'M',q:33},{s:'L',q:30}]},
+  {n:'ALO Water Bottle — Black',p:'$50',s:[{s:'One Size',q:29}]},
+  {n:'ALO Water Bottle — White',p:'$50',s:[{s:'One Size',q:31}]},
+  {n:'ALO Tank Top — Black',p:'$45',s:[{s:'XS',q:13},{s:'S',q:22},{s:'M',q:18},{s:'L',q:21}]},
+  {n:'ALO Tank Top — White',p:'$45',s:[{s:'XS',q:7},{s:'S',q:27},{s:'M',q:26},{s:'L',q:24}]},
+  {n:'ALO Skirt #1 — Black',p:'$49',s:[{s:'XS',q:0},{s:'S',q:0},{s:'M',q:0},{s:'L',q:5}]},
+  {n:'ALO Skirt #1 — White',p:'$49',s:[{s:'XS',q:5},{s:'S',q:0},{s:'M',q:4},{s:'L',q:14}]},
+].map(i=>card(i.n,i.p,i.s,null)).join(''));
+
+// ── DENIM TEAR SHORTS ──
+r('denim-shorts',[
+  {n:'Oreo',s:[{s:'S',q:11},{s:'M',q:53},{s:'L',q:76},{s:'XL',q:44}]},
+  {n:'Grey',s:[{s:'S',q:78},{s:'M',q:90},{s:'L',q:99},{s:'XL',q:120}]},
+  {n:'Pink',s:[{s:'S',q:14},{s:'M',q:86},{s:'L',q:102},{s:'XL',q:79}]},
+  {n:'Navy Blue',s:[{s:'S',q:0},{s:'M',q:0},{s:'L',q:0},{s:'XL',q:24}]},
+  {n:'Royal Blue',s:[{s:'S',q:0},{s:'M',q:0},{s:'L',q:0},{s:'XL',q:0}]},
+  {n:'Light Blue',s:[{s:'S',q:0},{s:'M',q:0},{s:'L',q:4},{s:'XL',q:2}]},
+  {n:'Orange',s:[{s:'S',q:24},{s:'M',q:16},{s:'L',q:19},{s:'XL',q:21}]},
+  {n:'Black Mono',s:[{s:'S',q:78},{s:'M',q:108},{s:'L',q:137},{s:'XL',q:109}]},
+  {n:'Brown',s:[{s:'S',q:0},{s:'M',q:0},{s:'L',q:4},{s:'XL',q:0}]},
+  {n:'White Mono',s:[{s:'S',q:2},{s:'M',q:4},{s:'L',q:33},{s:'XL',q:4}]},
+].map(i=>card('DT Shorts — '+i.n,'$55',i.s,null)).join(''));
+
+// ── DENIM TEAR HOODIES ──
+r('denim-hoodies',[
+  {n:'Black',s:[{s:'S',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:50}]},
+  {n:'Grey',s:[{s:'S',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:50}]},
+  {n:'Green',s:[{s:'S',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:50}]},
+  {n:'Purple',s:[{s:'S',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:50}]},
+  {n:'Red',s:[{s:'S',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:50}]},
+  {n:'Brown',s:[{s:'S',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:50}]},
+  {n:'Navy Blue',s:[{s:'S',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:50}]},
+  {n:'Orange',s:[{s:'S',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:50}]},
+  {n:'Royal Blue',s:[{s:'S',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:50}]},
+  {n:'Pink',s:[{s:'S',q:0},{s:'M',q:0},{s:'L',q:0},{s:'XL',q:0}]},
+].map(i=>card('DT Hoodie — '+i.n,'$60',i.s,null)).join(''));
+
+// ── ESSENTIALS TEES & SHORTS ──
+const teeCards = [
+  {n:'Stretch Limo',s:[{s:'XS',q:42},{s:'S',q:22},{s:'M',q:22},{s:'L',q:35},{s:'XL',q:37}]},
+  {n:'Dark Oatmeal',s:[{s:'XS',q:57},{s:'S',q:59},{s:'M',q:28},{s:'L',q:81},{s:'XL',q:54}]},
+  {n:'Light Oatmeal',s:[{s:'XS',q:33},{s:'S',q:44},{s:'M',q:59},{s:'L',q:53},{s:'XL',q:67}]},
+  {n:'Sycamore',s:[{s:'XS',q:0},{s:'S',q:0},{s:'M',q:0},{s:'L',q:0},{s:'XL',q:0}]},
+  {n:'1977 Iron',s:[{s:'XS',q:0},{s:'S',q:0},{s:'M',q:0},{s:'L',q:0},{s:'XL',q:0}]},
+  {n:'Coral',s:[{s:'XS',q:0},{s:'S',q:0},{s:'M',q:0},{s:'L',q:0},{s:'XL',q:0}]},
+  {n:'Jet Black',s:[{s:'XS',q:52},{s:'S',q:53},{s:'M',q:75},{s:'L',q:76},{s:'XL',q:50}]},
+].map(i=>card('Essential Tee — '+i.n,'$40',i.s,null));
+
+const shortCards = [
+  {n:'Stretch Limo',s:[{s:'XS',q:59},{s:'S',q:35},{s:'M',q:43},{s:'L',q:42},{s:'XL',q:42}]},
+  {n:'Dark Oatmeal',s:[{s:'XS',q:41},{s:'S',q:54},{s:'M',q:36},{s:'L',q:75},{s:'XL',q:39}]},
+  {n:'Light Oatmeal',s:[{s:'XS',q:56},{s:'S',q:32},{s:'M',q:49},{s:'L',q:48},{s:'XL',q:49}]},
+  {n:'Sycamore',s:[{s:'XXS',q:19},{s:'XS',q:47},{s:'S',q:60},{s:'M',q:59},{s:'L',q:62},{s:'XL',q:47}]},
+  {n:'1977 Iron',s:[{s:'XS',q:21},{s:'S',q:0},{s:'M',q:2},{s:'L',q:0},{s:'XL',q:0}]},
+  {n:'Coral',s:[{s:'XXS',q:20},{s:'XS',q:40},{s:'S',q:80},{s:'M',q:78},{s:'L',q:24},{s:'XL',q:0}]},
+].map(i=>card('Essential Shorts — '+i.n,'$45',i.s,null));
+
+r('ess-tees',`<div class="cat-label">Tees — $40</div>${teeCards.join('')}<div class="cat-label">Shorts — $45</div>${shortCards.join('')}`);
+
+// ── ESSENTIALS HOODIES ──
+const hoodies=[
+  {n:'Stretch Limo (Cuffed)',p:'$50',s:[{s:'XXS',q:50},{s:'XS',q:50},{s:'S',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:50}]},
+  {n:'Dark Oatmeal (Cuffed)',p:'$50',s:[{s:'XXS',q:50},{s:'XS',q:50},{s:'S',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:50}]},
+  {n:'Light Oatmeal (Cuffed)',p:'$50',s:[{s:'XXS',q:50},{s:'XS',q:50},{s:'S',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:50}]},
+  {n:'FW24 Black',p:'$55',s:[{s:'XS',q:50},{s:'S',q:20},{s:'M',q:50},{s:'L',q:0},{s:'XL',q:0}]},
+  {n:'FW24 Light Heather Grey',p:'$55',s:[{s:'XS',q:50},{s:'S',q:50},{s:'M',q:15},{s:'L',q:15},{s:'XL',q:50}]},
+  {n:'FW24 Desert Sand (Cuffed)',p:'$55',s:[{s:'S',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:50}]},
+  {n:'FW24 Heather Grey',p:'$55',s:[{s:'XS',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:50}]},
+  {n:'SS25 Heather Stone',p:'$55',s:[{s:'XXS',q:50},{s:'XS',q:50},{s:'S',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:50}]},
+  {n:'SS25 Homestead Heather',p:'$55',s:[{s:'XXS',q:50},{s:'XS',q:50},{s:'S',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:50}]},
+  {n:'SS25 Timber',p:'$55',s:[{s:'XXS',q:50},{s:'XS',q:50},{s:'S',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:50}]},
+  {n:'Coral (Cuffed)',p:'$50',s:[{s:'XXS',q:50},{s:'XS',q:50},{s:'S',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:50}]},
+  {n:'Plum (Cuffed)',p:'$50',s:[{s:'XXS',q:50},{s:'XS',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:50}]},
+  {n:'Sycamore (Cuffed)',p:'$50',s:[{s:'XXS',q:50},{s:'XS',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:50}]},
+  {n:'Jet Black (Cuffed)',p:'$50',s:[{s:'XS',q:50},{s:'S',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:50}]},
+  {n:'1977 Iron (Cuffed)',p:'$50',s:[{s:'XXS',q:50},{s:'XS',q:50},{s:'S',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:50}]},
+  {n:'SS24 Marine',p:'$55',s:[{s:'S',q:50},{s:'M',q:50},{s:'XL',q:50}]},
+  {n:'SS24 Crimson',p:'$55',s:[{s:'S',q:50},{s:'M',q:50}]},
+  {n:'FW24 Homecoming Black',p:'$55',s:[{s:'XS',q:50},{s:'S',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:50}]},
+  {n:'SS25 Heather Grey',p:'$55',s:[{s:'XXS',q:50},{s:'XS',q:50},{s:'S',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:50}]},
+  {n:'FW23 Mint Leaf',p:'$50',s:[{s:'XS',q:50},{s:'S',q:50},{s:'M',q:50},{s:'L',q:50},{s:'XL',q:10}]},
+  {n:'Eggshell',p:'$50',s:[{s:'XS',q:12},{s:'XL',q:1}]},
+];
+r('ess-hoodies', hoodies.map(h=>card(h.n,h.p,h.s,null)).join(''));
+</script>
+</body>
+</html>
